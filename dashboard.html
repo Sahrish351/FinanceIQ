@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard — FinanceIQ</title>
+<link rel="stylesheet" href="style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+.dash-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.recent-tx .tx-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--border); }
+.recent-tx .tx-row:last-child { border-bottom: none; }
+.tx-left { display: flex; align-items: center; gap: 12px; }
+.tx-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--surface2); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+.tx-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.tx-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.tx-amount { font-size: 15px; font-weight: 700; }
+.tx-amount.income { color: var(--green); }
+.tx-amount.expense { color: var(--danger); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.card-header h2 { font-size: 16px; font-weight: 600; }
+.budget-item { margin-bottom: 18px; }
+.budget-item:last-child { margin-bottom: 0; }
+.bud-top { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.bud-name { font-size: 14px; font-weight: 500; }
+.bud-vals { font-size: 12px; color: var(--muted); }
+.goal-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.goal-item:last-child { border-bottom: none; }
+.goal-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--green-glow); border: 1px solid var(--border2); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+.goal-info { flex: 1; }
+.goal-name { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+.goal-pct { font-size: 12px; color: var(--muted); margin-top: 4px; }
+canvas { width: 100% !important; }
+.net-positive { color: var(--green); }
+.net-negative { color: var(--danger); }
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .dash-grid-3 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-logo">Finance<span>IQ</span></a>
+  <ul class="nav-links">
+    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+    <li><a href="transaction.html">Transactions</a></li>
+    <li><a href="budget.html">Budget</a></li>
+    <li><a href="report.html">Reports</a></li>
+    <li><a href="goals.html">Goals</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-avatar">AK</div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+<div class="container">
+
+  <div class="page-header">
+    <h1>Good morning, Ahmed 👋</h1>
+    <p>Here's your financial overview for June 2025</p>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card card-accent">
+      <div class="sc-label">Total Balance</div>
+      <div class="sc-val" style="color:var(--text)">$12,480.50</div>
+      <div class="sc-sub" style="color:var(--green)">↑ +$340 this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Monthly Income</div>
+      <div class="sc-val net-positive">$4,200.00</div>
+      <div class="sc-sub" style="color:var(--muted)">vs $3,800 last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Monthly Expenses</div>
+      <div class="sc-val net-negative">$2,860.00</div>
+      <div class="sc-sub" style="color:var(--muted)">↑ $120 vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Net Savings</div>
+      <div class="sc-val" style="color:var(--gold)">$1,340.00</div>
+      <div class="sc-sub" style="color:var(--muted)">31.9% savings rate</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="dash-grid">
+    <div class="card card-accent">
+      <div class="card-header">
+        <h2>Income vs Expenses</h2>
+        <span class="badge badge-muted">Last 6 months</span>
+      </div>
+      <canvas id="barChart" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2>Spending by Category</h2>
+      </div>
+      <canvas id="donutChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS + BUDGETS -->
+  <div class="dash-grid">
+    <div class="card">
+      <div class="card-header">
+        <h2>Recent Transactions</h2>
+        <a href="transactions.html" class="btn btn-ghost btn-sm">View All</a>
+      </div>
+      <div class="recent-tx" id="recentTx"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2>Budget Status</h2>
+        <a href="budget.html" class="btn btn-ghost btn-sm">Manage</a>
+      </div>
+      <div id="budgetStatus"></div>
+    </div>
+  </div>
+
+  <!-- GOALS -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h2>Savings Goals</h2>
+      <a href="goals.html" class="btn btn-ghost btn-sm">View All</a>
+    </div>
+    <div class="dash-grid-3" id="goalsGrid"></div>
+  </div>
+
+  <!-- SPENDING TREND -->
+  <div class="card" style="margin-bottom:40px">
+    <div class="card-header">
+      <h2>Daily Spending — This Month</h2>
+      <span class="badge badge-green">June 2025</span>
+    </div>
+    <canvas id="lineChart" height="120"></canvas>
+  </div>
+
+</div>
+</div>
+
+<div id="toast">✓ Dashboard loaded</div>
+
+<script>
+const txData = [
+  { icon:'💰', name:'Monthly Salary', cat:'Income', date:'Jun 19', amount:3000, type:'income' },
+  { icon:'🏠', name:'Apartment Rent', cat:'Housing', date:'Jun 17', amount:-1200, type:'expense' },
+  { icon:'🛒', name:'Supermarket', cat:'Groceries', date:'Jun 16', amount:-45.67, type:'expense' },
+  { icon:'⚡', name:'Electricity Bill', cat:'Utilities', date:'Jun 15', amount:-150, type:'expense' },
+  { icon:'🎬', name:'Netflix', cat:'Entertainment', date:'Jun 14', amount:-12, type:'expense' },
+  { icon:'⛽', name:'Gas Station', cat:'Transport', date:'Jun 13', amount:-70, type:'expense' },
+];
+
+const txEl = document.getElementById('recentTx');
+txData.forEach(t => {
+  txEl.innerHTML += `<div class="tx-row">
+    <div class="tx-left">
+      <div class="tx-icon">${t.icon}</div>
+      <div><div class="tx-name">${t.name}</div><div class="tx-date">${t.cat} • ${t.date}</div></div>
+    </div>
+    <div class="tx-amount ${t.type}">${t.amount > 0 ? '+' : ''}$${Math.abs(t.amount).toFixed(2)}</div>
+  </div>`;
+});
+
+const budgets = [
+  { name:'🏠 Rent', spent:1200, total:1200, color:'#0f9d6a' },
+  { name:'🛒 Groceries', spent:380, total:500, color:'#f5a623' },
+  { name:'🎬 Entertainment', spent:180, total:200, color:'#e07070' },
+  { name:'⚡ Utilities', spent:150, total:300, color:'#0f9d6a' },
+  { name:'🚗 Transport', spent:70, total:200, color:'#0f9d6a' },
+];
+
+const budEl = document.getElementById('budgetStatus');
+budgets.forEach(b => {
+  const pct = Math.round(b.spent / b.total * 100);
+  budEl.innerHTML += `<div class="budget-item">
+    <div class="bud-top"><span class="bud-name">${b.name}</span><span class="bud-vals">$${b.spent} / $${b.total}</span></div>
+    <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%;background:${b.color}"></div></div>
+  </div>`;
+});
+
+const goals = [
+  { icon:'🏖️', name:'Vacation Fund', saved:1200, target:3000 },
+  { icon:'🚗', name:'New Car', saved:4500, target:15000 },
+  { icon:'🏠', name:'House Down Payment', saved:8000, target:40000 },
+];
+const goalsEl = document.getElementById('goalsGrid');
+goals.forEach(g => {
+  const pct = Math.round(g.saved / g.target * 100);
+  goalsEl.innerHTML += `<div class="card" style="background:var(--bg3);border-color:var(--border)">
+    <div style="font-size:28px;margin-bottom:10px">${g.icon}</div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:4px">${g.name}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">$${g.saved.toLocaleString()} / $${g.target.toLocaleString()}</div>
+    <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%;background:var(--green)"></div></div>
+    <div style="font-size:12px;color:var(--green);margin-top:6px;font-weight:600">${pct}% complete</div>
+  </div>`;
+});
+
+// Bar Chart
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+    datasets: [
+      { label:'Income', data:[3800,4000,3700,4100,3800,4200], backgroundColor:'rgba(15,157,106,0.8)', borderRadius:6 },
+      { label:'Expenses', data:[2900,3100,2600,2800,2740,2860], backgroundColor:'rgba(224,112,112,0.6)', borderRadius:6 }
+    ]
+  },
+  options: { responsive:true, plugins:{legend:{labels:{color:'#7a9189',font:{size:12}}}}, scales:{x:{ticks:{color:'#7a9189'},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7a9189'},grid:{color:'rgba(255,255,255,0.04)'}}}}
+});
+
+// Donut Chart
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Housing','Groceries','Transport','Entertainment','Utilities','Other'],
+    datasets: [{ data:[1200,380,70,180,150,880], backgroundColor:['#0f9d6a','#c9a84c','#e07070','#5b8cf7','#f5a623','#7a9189'], borderWidth:0, hoverOffset:6 }]
+  },
+  options: { responsive:true, cutout:'68%', plugins:{legend:{position:'bottom',labels:{color:'#7a9189',font:{size:11},boxWidth:10,padding:10}}} }
+});
+
+// Line Chart
+const days = Array.from({length:20},(_,i)=>i+1);
+const spending = [0,45,0,150,0,70,30,0,120,0,12,0,45,0,200,0,80,30,0,45];
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: {
+    labels: days,
+    datasets:[{ label:'Spending', data:spending, borderColor:'#0f9d6a', backgroundColor:'rgba(15,157,106,0.08)', fill:true, tension:0.4, pointRadius:3, pointBackgroundColor:'#0f9d6a' }]
+  },
+  options:{ responsive:true, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#7a9189'},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'#7a9189'},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}} }
+});
+
+// Toast
+setTimeout(() => {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}, 600);
+</script>
+</body>
+</html>

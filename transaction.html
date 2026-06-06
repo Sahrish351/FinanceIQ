@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Transactions — FinanceIQ</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+.toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:24px; }
+.search-wrap { position:relative; flex:1; min-width:200px; }
+.search-wrap input { width:100%; padding-left:38px; }
+.search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:16px; }
+.filter-row { display:flex; gap:10px; flex-wrap:wrap; }
+.filter-row select { padding:9px 14px; }
+.table-wrap { overflow-x:auto; }
+.cat-dot { width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:8px; flex-shrink:0; }
+.type-badge { padding:3px 10px; border-radius:50px; font-size:11px; font-weight:600; }
+.type-income { background:rgba(15,157,106,0.15); color:var(--green); }
+.type-expense { background:rgba(224,112,112,0.15); color:var(--danger); }
+.amount-cell { font-weight:700; font-size:15px; }
+.amount-income { color:var(--green); }
+.amount-expense { color:var(--danger); }
+.action-btns { display:flex; gap:6px; }
+.pagination { display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:16px; border-top:1px solid var(--border); }
+.page-btns { display:flex; gap:6px; }
+.page-btn { width:34px; height:34px; border-radius:8px; display:grid; place-items:center; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; font-size:14px; transition:all 0.2s; }
+.page-btn:hover, .page-btn.active { background:var(--green); color:#fff; border-color:var(--green); }
+.summary-bar { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px; }
+.sum-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px 18px; display:flex; flex-direction:column; gap:4px; }
+.sum-label { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.7px; }
+.sum-val { font-family:var(--display); font-size:22px; font-weight:700; }
+.empty-state { text-align:center; padding:50px 20px; color:var(--muted); }
+.empty-state .empty-icon { font-size:48px; margin-bottom:14px; }
+@media(max-width:600px){.summary-bar{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-logo">Finance<span>IQ</span></a>
+  <ul class="nav-links">
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="transaction.html" class="active">Transactions</a></li>
+    <li><a href="budget.html">Budget</a></li>
+    <li><a href="report.html">Reports</a></li>
+    <li><a href="goals.html">Goals</a></li>
+  </ul>
+  <div class="nav-right"><div class="nav-avatar">AK</div></div>
+</nav>
+
+<div class="page-wrap">
+<div class="container">
+
+  <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1>Transactions</h1>
+      <p>All your income and expense records</p>
+    </div>
+    <button class="btn btn-primary" onclick="openModal()">+ Add Transaction</button>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-bar">
+    <div class="sum-card">
+      <div class="sum-label">Total Income</div>
+      <div class="sum-val" style="color:var(--green)" id="sumIncome">$0.00</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">Total Expenses</div>
+      <div class="sum-val" style="color:var(--danger)" id="sumExpense">$0.00</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">Net Balance</div>
+      <div class="sum-val" id="sumNet">$0.00</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="form-control" id="searchInput" placeholder="Search transactions..." oninput="renderTable()"/>
+    </div>
+    <div class="filter-row">
+      <select class="form-control" id="filterType" onchange="renderTable()">
+        <option value="">All Types</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+      <select class="form-control" id="filterCat" onchange="renderTable()">
+        <option value="">All Categories</option>
+      </select>
+      <select class="form-control" id="filterMonth" onchange="renderTable()">
+        <option value="">All Time</option>
+        <option value="2025-06">June 2025</option>
+        <option value="2025-05">May 2025</option>
+        <option value="2025-04">April 2025</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">Clear</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="table-wrap">
+      <table class="data-table" id="txTable">
+        <thead>
+          <tr>
+            <th onclick="sortBy('date')" style="cursor:pointer">Date ↕</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th onclick="sortBy('amount')" style="cursor:pointer">Amount ↕</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="txBody"></tbody>
+      </table>
+    </div>
+    <div id="emptyState" class="empty-state" style="display:none">
+      <div class="empty-icon">💳</div>
+      <div>No transactions found</div>
+    </div>
+    <div class="pagination" style="padding:16px 20px">
+      <span style="font-size:13px;color:var(--muted)" id="pageInfo"></span>
+      <div class="page-btns" id="pageBtns"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Transaction</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" class="form-control" id="fDate" required/>
+    </div>
+    <div class="form-group">
+      <label>Type</label>
+      <select class="form-control" id="fType" onchange="updateCatOptions()">
+        <option value="expense">Expense</option>
+        <option value="income">Income</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <select class="form-control" id="fCat"></select>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" class="form-control" id="fDesc" placeholder="e.g. Grocery shopping"/>
+    </div>
+    <div class="form-group">
+      <label>Amount ($)</label>
+      <input type="number" class="form-control" id="fAmt" placeholder="0.00" min="0" step="0.01"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTransaction()">Save Transaction</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">✓ Done</div>
+
+<script>
+const catMap = {
+  expense: ['Rent','Groceries','Utilities','Transport','Entertainment','Food','Healthcare','Shopping','Education','Other'],
+  income: ['Salary','Freelance','Investment','Business','Gift','Refund','Other']
+};
+const catColors = {'Rent':'#5b8cf7','Groceries':'#f5a623','Utilities':'#e07070','Transport':'#c9a84c','Entertainment':'#a78bfa','Salary':'#0f9d6a','Freelance':'#0f9d6a','Income':'#0f9d6a','Food':'#f97316','Healthcare':'#06b6d4','Shopping':'#ec4899','Education':'#8b5cf6','Other':'#7a9189','Investment':'#c9a84c','Business':'#0f9d6a','Gift':'#f43f5e','Refund':'#0f9d6a'};
+
+let transactions = [
+  {id:1,date:'2025-06-20',type:'expense',category:'Groceries',desc:'Supermarket',amount:45.67},
+  {id:2,date:'2025-06-19',type:'income',category:'Salary',desc:'Monthly Salary',amount:3000},
+  {id:3,date:'2025-06-18',type:'expense',category:'Entertainment',desc:'Movie Night',amount:12},
+  {id:4,date:'2025-06-17',type:'expense',category:'Rent',desc:'Apartment Rent',amount:1200},
+  {id:5,date:'2025-06-16',type:'expense',category:'Utilities',desc:'Electricity Bill',amount:150},
+  {id:6,date:'2025-06-15',type:'expense',category:'Transport',desc:'Gas & Maintenance',amount:70},
+  {id:7,date:'2025-06-14',type:'expense',category:'Entertainment',desc:'Netflix',amount:12},
+  {id:8,date:'2025-06-12',type:'income',category:'Freelance',desc:'Web Design Project',amount:800},
+  {id:9,date:'2025-06-10',type:'expense',category:'Food',desc:'Restaurant dinner',amount:35},
+  {id:10,date:'2025-06-08',type:'expense',category:'Shopping',desc:'Clothes',amount:120},
+  {id:11,date:'2025-05-30',type:'income',category:'Salary',desc:'Monthly Salary',amount:3000},
+  {id:12,date:'2025-05-28',type:'expense',category:'Groceries',desc:'Weekly groceries',amount:60},
+];
+
+let nextId = 13;
+let sortField = 'date';
+let sortDir = -1;
+let editId = null;
+let currentPage = 1;
+const PER_PAGE = 8;
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const type = document.getElementById('filterType').value;
+  const cat = document.getElementById('filterCat').value;
+  const month = document.getElementById('filterMonth').value;
+  return transactions.filter(t =>
+    (!q || t.desc.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)) &&
+    (!type || t.type === type) &&
+    (!cat || t.category === cat) &&
+    (!month || t.date.startsWith(month))
+  ).sort((a,b) => {
+    if(sortField==='date') return (a.date > b.date ? 1 : -1) * sortDir;
+    return (a.amount - b.amount) * sortDir;
+  });
+}
+
+function renderTable() {
+  const filtered = getFiltered();
+  const income = filtered.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  const expense = filtered.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const net = income - expense;
+  document.getElementById('sumIncome').textContent = '$'+income.toFixed(2);
+  document.getElementById('sumExpense').textContent = '$'+expense.toFixed(2);
+  const netEl = document.getElementById('sumNet');
+  netEl.textContent = (net>=0?'+':'') + '$'+Math.abs(net).toFixed(2);
+  netEl.style.color = net >= 0 ? 'var(--green)' : 'var(--danger)';
+
+  const total = filtered.length;
+  const pages = Math.max(1, Math.ceil(total / PER_PAGE));
+  currentPage = Math.min(currentPage, pages);
+  const slice = filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
+
+  const tbody = document.getElementById('txBody');
+  const empty = document.getElementById('emptyState');
+  if(slice.length === 0) { tbody.innerHTML=''; empty.style.display='block'; }
+  else {
+    empty.style.display='none';
+    tbody.innerHTML = slice.map(t => `
+      <tr>
+        <td style="font-size:13px;color:var(--muted)">${t.date}</td>
+        <td><span class="cat-dot" style="background:${catColors[t.category]||'#7a9189'}"></span>${t.category}</td>
+        <td>${t.desc}</td>
+        <td><span class="type-badge type-${t.type}">${t.type}</span></td>
+        <td class="amount-cell amount-${t.type}">${t.type==='income'?'+':'-'}$${t.amount.toFixed(2)}</td>
+        <td><div class="action-btns">
+          <button class="btn btn-ghost btn-sm" onclick="editTx(${t.id})">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteTx(${t.id})">🗑</button>
+        </div></td>
+      </tr>
+    `).join('');
+  }
+
+  document.getElementById('pageInfo').textContent = `Showing ${Math.min((currentPage-1)*PER_PAGE+1,total)}–${Math.min(currentPage*PER_PAGE,total)} of ${total}`;
+  const pb = document.getElementById('pageBtns');
+  pb.innerHTML = '';
+  for(let i=1;i<=pages;i++){
+    const b = document.createElement('button');
+    b.className = 'page-btn'+(i===currentPage?' active':'');
+    b.textContent = i;
+    b.onclick = () => { currentPage=i; renderTable(); };
+    pb.appendChild(b);
+  }
+
+  // populate category filter
+  const cats = [...new Set(transactions.map(t=>t.category))].sort();
+  const cf = document.getElementById('filterCat');
+  const cur = cf.value;
+  cf.innerHTML = '<option value="">All Categories</option>' + cats.map(c=>`<option value="${c}"${c===cur?' selected':''}>${c}</option>`).join('');
+}
+
+function sortBy(f) { if(sortField===f) sortDir*=-1; else { sortField=f; sortDir=-1; } renderTable(); }
+
+function openModal(id=null) {
+  editId = id;
+  document.getElementById('modalTitle').textContent = id ? 'Edit Transaction' : 'Add Transaction';
+  if(id) {
+    const t = transactions.find(x=>x.id===id);
+    document.getElementById('fDate').value = t.date;
+    document.getElementById('fType').value = t.type;
+    updateCatOptions();
+    document.getElementById('fCat').value = t.category;
+    document.getElementById('fDesc').value = t.desc;
+    document.getElementById('fAmt').value = t.amount;
+  } else {
+    document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('fType').value = 'expense';
+    updateCatOptions();
+    document.getElementById('fDesc').value = '';
+    document.getElementById('fAmt').value = '';
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function updateCatOptions() {
+  const type = document.getElementById('fType').value;
+  const cats = catMap[type];
+  document.getElementById('fCat').innerHTML = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+
+function saveTransaction() {
+  const date=document.getElementById('fDate').value, type=document.getElementById('fType').value,
+        cat=document.getElementById('fCat').value, desc=document.getElementById('fDesc').value,
+        amt=parseFloat(document.getElementById('fAmt').value);
+  if(!date||!desc||!amt||amt<=0) { showToast('⚠️ Please fill all fields'); return; }
+  if(editId) {
+    const t = transactions.find(x=>x.id===editId);
+    Object.assign(t,{date,type,category:cat,desc,amount:amt});
+    showToast('✏️ Transaction updated');
+  } else {
+    transactions.unshift({id:nextId++,date,type,category:cat,desc,amount:amt});
+    showToast('✓ Transaction added');
+  }
+  closeModal(); renderTable();
+}
+
+function editTx(id) { openModal(id); }
+
+function deleteTx(id) {
+  if(confirm('Delete this transaction?')) {
+    transactions = transactions.filter(t=>t.id!==id);
+    showToast('🗑 Deleted'); renderTable();
+  }
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value='';
+  document.getElementById('filterType').value='';
+  document.getElementById('filterCat').value='';
+  document.getElementById('filterMonth').value='';
+  renderTable();
+}
+
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg;
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+updateCatOptions();
+renderTable();
+</script>
+</body>
+</html>

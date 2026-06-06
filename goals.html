@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Goals — FinanceIQ</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+.goals-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; margin-bottom:32px; }
+.goal-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:26px; transition:all 0.25s; position:relative; overflow:hidden; }
+.goal-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:var(--radius) var(--radius) 0 0; }
+.goal-card:hover { border-color:var(--border2); transform:translateY(-3px); }
+.goal-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; }
+.goal-emoji { font-size:32px; }
+.goal-actions { display:flex; gap:6px; }
+.goal-name { font-size:18px; font-weight:600; margin-bottom:4px; }
+.goal-deadline { font-size:13px; color:var(--muted); }
+.goal-amounts { display:flex; justify-content:space-between; margin:16px 0 8px; align-items:flex-end; }
+.goal-saved { font-family:var(--display); font-size:26px; font-weight:700; }
+.goal-target { font-size:14px; color:var(--muted); }
+.goal-pct { font-size:13px; font-weight:600; margin-top:8px; text-align:right; }
+.goal-monthly { font-size:13px; color:var(--muted); margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+.goal-monthly strong { color:var(--text); }
+.completed-badge { background:rgba(15,157,106,0.15); border:1px solid var(--border2); color:var(--green); padding:3px 12px; border-radius:50px; font-size:12px; font-weight:600; }
+.summary-goals { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:28px; }
+.deposit-form { background:var(--bg3); border-radius:var(--radius-sm); padding:14px; margin-top:14px; display:none; }
+.deposit-form.open { display:block; }
+.deposit-row { display:flex; gap:8px; }
+.deposit-row input { flex:1; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="nav-logo">Finance<span>IQ</span></a>
+  <ul class="nav-links">
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="transaction.html">Transactions</a></li>
+    <li><a href="budget.html">Budget</a></li>
+    <li><a href="report.html">Reports</a></li>
+    <li><a href="goals.html" class="active">Goals</a></li>
+  </ul>
+  <div class="nav-right"><div class="nav-avatar">AK</div></div>
+</nav>
+
+<div class="page-wrap">
+<div class="container">
+
+  <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1>Savings Goals</h1>
+      <p>Set targets, make deposits, achieve your dreams</p>
+    </div>
+    <button class="btn btn-primary" onclick="openModal()">+ New Goal</button>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-goals" id="goalSummary"></div>
+
+  <!-- GOALS GRID -->
+  <div class="goals-grid" id="goalsGrid"></div>
+
+  <div id="emptyGoals" style="display:none;text-align:center;padding:60px 20px;color:var(--muted)">
+    <div style="font-size:48px;margin-bottom:14px">🎯</div>
+    <div style="font-size:16px">No savings goals yet. Start with your first one!</div>
+    <button class="btn btn-primary" style="margin-top:18px" onclick="openModal()">Create Goal</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>New Savings Goal</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label>Goal Name</label>
+      <input type="text" class="form-control" id="gName" placeholder="e.g. Dream Vacation"/>
+    </div>
+    <div class="form-group">
+      <label>Emoji / Icon</label>
+      <select class="form-control" id="gEmoji">
+        <option value="🏖️">🏖️ Vacation</option>
+        <option value="🚗">🚗 New Car</option>
+        <option value="🏠">🏠 House</option>
+        <option value="📱">📱 Gadget</option>
+        <option value="💍">💍 Wedding</option>
+        <option value="🎓">🎓 Education</option>
+        <option value="🏥">🏥 Emergency Fund</option>
+        <option value="✈️">✈️ Travel</option>
+        <option value="💻">💻 Laptop</option>
+        <option value="🎯">🎯 Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Target Amount ($)</label>
+      <input type="number" class="form-control" id="gTarget" placeholder="10000" min="1"/>
+    </div>
+    <div class="form-group">
+      <label>Already Saved ($)</label>
+      <input type="number" class="form-control" id="gSaved" placeholder="0" min="0"/>
+    </div>
+    <div class="form-group">
+      <label>Target Date</label>
+      <input type="date" class="form-control" id="gDate"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="addGoal()">Create Goal</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">✓ Done</div>
+
+<script>
+const goalColors = ['#0f9d6a','#c9a84c','#5b8cf7','#f5a623','#a78bfa','#e07070','#06b6d4','#ec4899'];
+
+let goals = [
+  {id:1,name:'Dream Vacation',emoji:'🏖️',target:3000,saved:1200,deadline:'2025-12-31',color:'#0f9d6a'},
+  {id:2,name:'New Car',emoji:'🚗',target:15000,saved:4500,deadline:'2026-06-30',color:'#c9a84c'},
+  {id:3,name:'Emergency Fund',emoji:'🏥',target:10000,saved:8000,deadline:'2025-09-30',color:'#5b8cf7'},
+  {id:4,name:'House Down Payment',emoji:'🏠',target:40000,saved:5200,deadline:'2027-12-31',color:'#f5a623'},
+];
+let nextId = 5;
+let colorIdx = 4;
+let depositId = null;
+
+function daysLeft(deadline) {
+  const diff = new Date(deadline) - new Date();
+  return Math.max(0, Math.ceil(diff / 86400000));
+}
+
+function monthsLeft(deadline) {
+  const d = new Date(deadline), now = new Date();
+  return Math.max(1, (d.getFullYear()-now.getFullYear())*12 + d.getMonth()-now.getMonth());
+}
+
+function render() {
+  const grid = document.getElementById('goalsGrid');
+  const empty = document.getElementById('emptyGoals');
+  if(goals.length === 0) { grid.innerHTML=''; empty.style.display='block'; renderSummary(); return; }
+  empty.style.display='none';
+
+  grid.innerHTML = goals.map(g => {
+    const pct = Math.min(100, Math.round(g.saved / g.target * 100));
+    const done = pct >= 100;
+    const rem = g.target - g.saved;
+    const ml = monthsLeft(g.deadline);
+    const monthlyNeeded = done ? 0 : Math.ceil(rem / ml);
+    const days = daysLeft(g.deadline);
+    return `<div class="goal-card">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${g.color};border-radius:var(--radius) var(--radius) 0 0"></div>
+      <div class="goal-top">
+        <div>
+          <div class="goal-emoji">${g.emoji}</div>
+        </div>
+        <div class="goal-actions">
+          ${done ? '<span class="completed-badge">✓ Done!</span>' : `<button class="btn btn-ghost btn-sm" onclick="toggleDeposit(${g.id})">+ Deposit</button>`}
+          <button class="btn btn-danger btn-sm" onclick="deleteGoal(${g.id})">🗑</button>
+        </div>
+      </div>
+      <div class="goal-name">${g.name}</div>
+      <div class="goal-deadline">${done ? '🎉 Goal achieved!' : `📅 ${days} days left · ${g.deadline}`}</div>
+      <div class="goal-amounts">
+        <div><div style="font-size:12px;color:var(--muted);margin-bottom:4px">Saved</div><div class="goal-saved" style="color:${g.color}">$${g.saved.toLocaleString()}</div></div>
+        <div style="text-align:right"><div style="font-size:12px;color:var(--muted);margin-bottom:4px">Target</div><div class="goal-target" style="font-size:18px;font-weight:600;color:var(--text)">$${g.target.toLocaleString()}</div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-fill" style="width:${pct}%;background:${g.color}"></div>
+      </div>
+      <div class="goal-pct" style="color:${g.color}">${pct}% complete</div>
+      ${!done ? `<div class="goal-monthly">Need <strong>$${monthlyNeeded}/mo</strong> to reach your goal on time</div>` : ''}
+      <div class="deposit-form" id="dep-${g.id}">
+        <div class="deposit-row">
+          <input type="number" class="form-control" id="depAmt-${g.id}" placeholder="Amount to deposit" min="1"/>
+          <button class="btn btn-primary btn-sm" onclick="makeDeposit(${g.id})">Add</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleDeposit(${g.id})">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderSummary();
+}
+
+function renderSummary() {
+  const total = goals.reduce((s,g)=>s+g.target,0);
+  const saved = goals.reduce((s,g)=>s+g.saved,0);
+  const done = goals.filter(g=>g.saved>=g.target).length;
+  document.getElementById('goalSummary').innerHTML = `
+    <div class="stat-card"><div class="sc-label">Total Goals</div><div class="sc-val">${goals.length}</div></div>
+    <div class="stat-card"><div class="sc-label">Completed</div><div class="sc-val" style="color:var(--green)">${done}</div></div>
+    <div class="stat-card"><div class="sc-label">Total Saved</div><div class="sc-val" style="color:var(--gold)">$${saved.toLocaleString()}</div></div>
+    <div class="stat-card"><div class="sc-label">Total Target</div><div class="sc-val">$${total.toLocaleString()}</div></div>
+  `;
+}
+
+function toggleDeposit(id) {
+  const el = document.getElementById('dep-'+id);
+  el.classList.toggle('open');
+}
+
+function makeDeposit(id) {
+  const amt = parseFloat(document.getElementById('depAmt-'+id).value);
+  if(!amt || amt <= 0) { showToast('⚠️ Enter a valid amount'); return; }
+  const g = goals.find(x=>x.id===id);
+  g.saved = Math.min(g.target, g.saved + amt);
+  render();
+  showToast(`✓ $${amt} added to ${g.name}`);
+}
+
+function deleteGoal(id) {
+  if(confirm('Delete this goal?')) {
+    goals = goals.filter(g=>g.id!==id);
+    render(); showToast('🗑 Goal deleted');
+  }
+}
+
+function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function addGoal() {
+  const name = document.getElementById('gName').value;
+  const emoji = document.getElementById('gEmoji').value;
+  const target = parseFloat(document.getElementById('gTarget').value);
+  const saved = parseFloat(document.getElementById('gSaved').value) || 0;
+  const deadline = document.getElementById('gDate').value;
+  if(!name || !target || target<=0 || !deadline) { showToast('⚠️ Fill all fields'); return; }
+  goals.push({id:nextId++, name, emoji, target, saved, deadline, color:goalColors[colorIdx++ % goalColors.length]});
+  closeModal();
+  document.getElementById('gName').value='';
+  document.getElementById('gTarget').value='';
+  document.getElementById('gSaved').value='';
+  document.getElementById('gDate').value='';
+  render();
+  showToast('✓ Goal created');
+}
+
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg;
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+render();
+</script>
+</body>
+</html>

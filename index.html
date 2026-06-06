@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FinanceIQ — Master Your Money</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root { --transition-theme: background 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
+
+[data-theme="dark"] {
+  --bg:#080c0a; --bg2:#0d1210; --bg3:#111918; --surface:#161f1c; --surface2:#1c2926;
+  --border:rgba(255,255,255,0.06); --border2:rgba(16,185,110,0.3);
+  --text:#eef3f0; --text2:#a8bfb5; --muted:#5e7a70;
+  --green:#10b96e; --green2:#0d9459; --green-glow:rgba(16,185,110,0.12);
+  --gold:#d4a843; --gold-dim:rgba(212,168,67,0.1);
+  --shadow:0 24px 60px rgba(0,0,0,0.6); --shadow-sm:0 4px 20px rgba(0,0,0,0.4);
+  --nav-bg:rgba(8,12,10,0.88);
+}
+[data-theme="light"] {
+  --bg:#f5f7f5; --bg2:#eef1ee; --bg3:#e6ebe6; --surface:#ffffff; --surface2:#f0f4f1;
+  --border:rgba(0,0,0,0.08); --border2:rgba(16,140,80,0.3);
+  --text:#0f1a14; --text2:#3a5045; --muted:#7a9a88;
+  --green:#0d8c55; --green2:#0a7044; --green-glow:rgba(13,140,85,0.1);
+  --gold:#b8882a; --gold-dim:rgba(184,136,42,0.1);
+  --shadow:0 24px 60px rgba(0,0,0,0.1); --shadow-sm:0 4px 20px rgba(0,0,0,0.07);
+  --nav-bg:rgba(245,247,245,0.92);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:var(--transition-theme);line-height:1.6;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:99px;}
+
+
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:72px;background:var(--nav-bg);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--border);transition:var(--transition-theme),height 0.3s;}
+.navbar.scrolled{height:62px;}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-brand-mark{width:36px;height:36px;border-radius:10px;background:var(--green);display:grid;place-items:center;font-size:18px;color:#fff;font-weight:800;box-shadow:0 4px 14px var(--green-glow);}
+.nav-brand-name{font-family: Georgia,serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-0.5px;}
+.nav-brand-name em{font-style:italic;color:var(--green);}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none;}
+.nav-links a{display:block;padding:7px 14px;border-radius:8px;color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:all 0.2s;}
+.nav-links a:hover{color:var(--text);background:var(--surface2);}
+.nav-actions{display:flex;align-items:center;gap:10px;}
+
+.theme-toggle{width:56px;height:30px;border-radius:99px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;position:relative;display:flex;align-items:center;padding:3px;flex-shrink:0;transition:background 0.3s;}
+.toggle-knob{width:24px;height:24px;border-radius:50%;background:var(--green);display:grid;place-items:center;font-size:13px;transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);transform:translateX(0);box-shadow:0 2px 8px rgba(0,0,0,0.3);}
+[data-theme="light"] .toggle-knob{transform:translateX(26px);}
+.toggle-knob::after{content:'🌙';}
+[data-theme="light"] .toggle-knob::after{content:'☀️';}
+
+.btn-ghost{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);background:var(--green-glow);}
+.btn-solid{padding:8px 20px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;box-shadow:0 4px 14px var(--green-glow);}
+.btn-solid:hover{background:var(--green2);transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s;}
+
+
+.mobile-nav{display:none;position:fixed;inset:0;z-index:999;background:var(--bg);padding:90px 5% 40px;flex-direction:column;gap:8px;}
+.mobile-nav.open{display:flex;}
+.mobile-nav a{display:block;padding:14px 16px;border-radius:10px;color:var(--text);text-decoration:none;font-size:17px;font-weight:600;border:1px solid var(--border);transition:all 0.2s;}
+.mobile-nav a:hover{background:var(--surface);border-color:var(--border2);color:var(--green);}
+
+
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 5% 60px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 100% 80% at 60% -20%,rgba(16,185,110,0.14) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 10% 80%,rgba(212,168,67,0.06) 0%,transparent 60%),var(--bg);}
+[data-theme="light"] .hero-bg{background:radial-gradient(ellipse 100% 80% at 60% -20%,rgba(13,140,85,0.1) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 10% 80%,rgba(212,168,67,0.07) 0%,transparent 60%),var(--bg);}
+.hero-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,black 20%,transparent 80%);}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1200px;margin:0 auto;width:100%;}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;border-radius:99px;background:var(--green-glow);border:1px solid var(--border2);font-size:13px;font-weight:500;color:var(--green);margin-bottom:28px;animation:fadeUp 0.7s ease both;}
+.hero-badge-dot{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:13px;}
+
+.hero-h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(52px,6vw,82px);font-weight:700;line-height:1.0;letter-spacing:-2px;color:var(--text);margin-bottom:24px;animation:fadeUp 0.7s 0.1s ease both;}
+.hero-h1 .green{color:var(--green);font-style:italic;}
+.hero-h1 .gold{color:var(--gold);}
+
+.hero-desc{font-size:18px;color:var(--text2);line-height:1.7;max-width:480px;margin-bottom:40px;font-weight:400;animation:fadeUp 0.7s 0.2s ease both;}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:50px;animation:fadeUp 0.7s 0.3s ease both;}
+
+.btn-hero-p{padding:15px 32px;border-radius:12px;border:none;background:var(--green);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;box-shadow:0 8px 28px var(--green-glow);}
+.btn-hero-p:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 14px 36px var(--green-glow);}
+.btn-hero-s{padding:15px 28px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;}
+.btn-hero-s:hover{border-color:var(--border2);background:var(--green-glow);}
+
+.hero-proof{display:flex;align-items:center;gap:16px;animation:fadeUp 0.7s 0.4s ease both;}
+.hero-avatars{display:flex;}
+.hero-avatars span{width:34px;height:34px;border-radius:50%;border:2px solid var(--bg);margin-left:-8px;display:grid;place-items:center;font-size:14px;font-weight:700;color:#fff;}
+.hero-avatars span:first-child{margin-left:0;}
+.proof-text{font-size:14px;color:var(--text2);}
+.proof-text strong{color:var(--text);}
+.proof-stars{color:var(--gold);font-size:13px;}
+
+
+.hero-visual{position:relative;animation:fadeUp 0.8s 0.3s ease both;}
+.hero-card-main{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.hero-card-main::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--gold),var(--green));background-size:200% 100%;animation:shimmer 3s linear infinite;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.hc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.hc-title{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;}
+.hc-period{font-size:12px;color:var(--muted);background:var(--bg3);padding:4px 12px;border-radius:99px;border:1px solid var(--border);}
+.hc-balance{font-family:'Poppins', sans-serif;font-size:42px;font-weight:700;color:var(--text);letter-spacing:-2px;margin-bottom:6px;}
+.hc-change{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--green);background:var(--green-glow);padding:4px 12px;border-radius:99px;margin-bottom:24px;}
+.hc-bars{display:flex;align-items:flex-end;gap:6px;height:70px;margin-bottom:22px;}
+.hc-bar{flex:1;border-radius:5px 5px 0 0;cursor:pointer;transition:opacity 0.2s;}
+.hc-bar:hover{opacity:0.75;}
+.hc-bar-inc{background:linear-gradient(to top,var(--green2),var(--green));}
+.hc-bar-exp{background:linear-gradient(to top,#b55a5a,#e07070);}
+.hc-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.hc-mini{background:var(--bg3);border-radius:12px;padding:14px;border:1px solid var(--border);}
+.hc-mini-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:5px;}
+.hc-mini-val{font-family:'Poppins', sans-serif;font-size:22px;font-weight:700;}
+.hc-txs{border-top:1px solid var(--border);padding-top:16px;}
+.hc-tx{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);}
+.hc-tx:last-child{border-bottom:none;}
+.hc-tx-left{display:flex;align-items:center;gap:10px;}
+.hc-tx-icon{width:34px;height:34px;border-radius:9px;background:var(--surface2);display:grid;place-items:center;font-size:16px;}
+.hc-tx-name{font-size:13px;font-weight:500;color:var(--text);}
+.hc-tx-cat{font-size:11px;color:var(--muted);}
+.hc-tx-amt{font-size:14px;font-weight:700;}
+
+
+.float-card{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow-sm);animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.float-card-1{top:-20px;right:-20px;min-width:140px;animation-delay:0s;}
+.float-card-2{bottom:40px;left:-30px;min-width:150px;animation-delay:1.5s;}
+.fc-lbl{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.fc-val{font-size:18px;font-weight:800;color:var(--green);}
+.fc-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+
+
+.ticker{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;overflow:hidden;}
+.ticker-inner{display:flex;gap:0;animation:ticker 28s linear infinite;width:max-content;}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:8px;padding:0 36px;white-space:nowrap;font-size:13px;font-weight:500;color:var(--text2);border-right:1px solid var(--border);}
+.ticker-item .ti-val{font-weight:700;}
+.ticker-item .ti-up{color:var(--green);}
+.ticker-item .ti-dn{color:#e07070;}
+
+
+.quick-nav{background:var(--bg2);}
+.quick-nav-inner{display:flex;max-width:1200px;margin:0 auto;border-left:1px solid var(--border);}
+.qn-item{flex:1;display:flex;align-items:center;gap:14px;padding:26px 28px;text-decoration:none;color:var(--text);border-right:1px solid var(--border);transition:all 0.25s;position:relative;overflow:hidden;}
+.qn-item::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transition:transform 0.3s;}
+.qn-item:hover::after{transform:scaleX(1);}
+.qn-item:hover{background:var(--surface);}
+.qn-icon{width:44px;height:44px;border-radius:12px;background:var(--green-glow);border:1px solid var(--border2);display:grid;place-items:center;font-size:20px;flex-shrink:0;}
+.qn-label{font-size:15px;font-weight:700;margin-bottom:2px;}
+.qn-desc{font-size:12px;color:var(--muted);}
+.qn-arrow{margin-left:auto;color:var(--muted);font-size:18px;transition:transform 0.2s;}
+.qn-item:hover .qn-arrow{transform:translateX(4px);color:var(--green);}
+
+
+section{padding:100px 5%;}
+.container{max-width:1200px;margin:0 auto;}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:16px;}
+.sec-eyebrow::before{content:'';width:20px;height:2px;background:var(--green);}
+.sec-title{font-family:'Poppins', sans-serif;font-size:clamp(34px,4vw,54px);font-weight:700;line-height:1.1;letter-spacing:-1.5px;color:var(--text);margin-bottom:18px;}
+.sec-title em{font-style:italic;color:var(--green);}
+.sec-desc{font-size:17px;color:var(--text2);line-height:1.75;max-width:520px;}
+
+.features-sec{background:var(--bg);}
+.features-head{text-align:center;margin-bottom:64px;}
+.features-head .sec-desc{margin:0 auto;}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+.feat-card{background:var(--surface);padding:36px 32px;transition:all 0.3s;position:relative;overflow:hidden;cursor:default;}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:var(--green-glow);opacity:0;transition:opacity 0.3s;}
+.feat-card:hover::before{opacity:1;}
+.feat-card:hover{background:var(--surface2);}
+.feat-num{font-family:'Poppins', sans-serif;font-size:48px;font-weight:700;color:var(--border2);line-height:1;margin-bottom:14px;transition:color 0.3s;}
+.feat-card:hover .feat-num{color:var(--green);}
+.feat-icon-wrap{width:52px;height:52px;border-radius:14px;background:var(--bg3);border:1px solid var(--border);display:grid;place-items:center;font-size:24px;margin-bottom:18px;transition:all 0.3s;}
+.feat-card:hover .feat-icon-wrap{background:var(--green-glow);border-color:var(--border2);}
+.feat-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.feat-desc{font-size:14px;color:var(--text2);line-height:1.7;}
+.feat-tag{position:absolute;top:20px;right:20px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(212,168,67,0.2);}
+
+
+.how-sec{background:var(--bg2);}
+.how-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:0 auto;}
+.steps-list{margin-top:40px;display:flex;flex-direction:column;}
+.step-item{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);transition:all 0.2s;cursor:default;}
+.step-item:last-child{border-bottom:none;}
+.step-item:hover{padding-left:6px;}
+.step-num{width:40px;height:40px;border-radius:50%;background:var(--surface);border:2px solid var(--border);display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text);transition:all 0.3s;flex-shrink:0;margin-top:2px;}
+.step-item:hover .step-num{background:var(--green);border-color:var(--green);color:#fff;}
+.step-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px;margin-top:8px;}
+.step-desc{font-size:14px;color:var(--text2);line-height:1.65;}
+
+
+.phone-wrap{position:relative;display:flex;justify-content:center;}
+.phone-outer{width:280px;background:var(--surface2);border-radius:40px;border:8px solid var(--surface);box-shadow:var(--shadow),inset 0 0 0 1px var(--border);padding:16px;overflow:hidden;position:relative;}
+.phone-notch{width:80px;height:28px;background:var(--surface2);border-radius:0 0 18px 18px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;gap:6px;}
+.phone-cam{width:8px;height:8px;border-radius:50%;background:var(--bg3);}
+.phone-screen{background:var(--bg3);border-radius:24px;padding:16px;}
+.ps-header{font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.ps-balance{font-family:'Poppins', sans-serif;font-size:30px;font-weight:700;text-align:center;color:var(--text);margin-bottom:3px;}
+.ps-change{text-align:center;font-size:12px;color:var(--green);font-weight:700;margin-bottom:16px;}
+.ps-bars{display:flex;align-items:flex-end;gap:4px;height:50px;margin-bottom:14px;}
+.ps-tx{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
+.ps-tx:last-child{border-bottom:none;}
+.ps-tx span{font-size:11px;color:var(--text2);}
+.ps-tx strong{font-size:12px;font-weight:700;}
+.phone-glow{position:absolute;inset:-30px;z-index:-1;background:radial-gradient(circle,rgba(16,185,110,0.12) 0%,transparent 70%);border-radius:50%;}
+
+
+.stats-strip{background:var(--green);padding:60px 5%;}
+.stats-strip-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto;text-align:center;}
+.ss-num{font-family:'Poppins', sans-serif;font-size:52px;font-weight:700;color:#fff;line-height:1;margin-bottom:6px;}
+.ss-label{font-size:14px;color:rgba(255,255,255,0.7);font-weight:500;}
+
+
+.testi-sec{background:var(--bg);}
+.testi-head{text-align:center;margin-bottom:56px;}
+.testi-head .sec-desc{margin:0 auto;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto;}
+.testi-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;transition:all 0.3s;position:relative;overflow:hidden;}
+.testi-card::after{content:'"';position:absolute;bottom:-20px;right:20px;font-family:'Poppins', sans-serif;font-size:140px;line-height:1;color:var(--border);pointer-events:none;}
+.testi-card:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:var(--shadow-sm);}
+.testi-stars{display:flex;gap:3px;margin-bottom:16px;}
+.testi-stars span{color:var(--gold);font-size:16px;}
+.testi-quote{font-size:15px;color:var(--text2);line-height:1.75;margin-bottom:24px;position:relative;z-index:1;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;}
+.testi-name{font-size:15px;font-weight:700;color:var(--text);}
+.testi-role{font-size:12px;color:var(--muted);margin-top:2px;}
+
+
+.plans-sec{background:var(--bg2);}
+.plans-head{text-align:center;margin-bottom:56px;}
+.plans-head .sec-desc{margin:0 auto;}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto;}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px 30px;transition:all 0.3s;position:relative;}
+.plan-card.featured{border-color:var(--green);background:var(--surface2);box-shadow:0 0 0 1px var(--border2),var(--shadow-sm);}
+.plan-popular{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:4px 16px;border-radius:99px;white-space:nowrap;}
+.plan-name{font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.plan-price{font-family:'Poppins', sans-serif;font-size:48px;font-weight:700;color:var(--text);line-height:1;margin-bottom:6px;}
+.plan-price sup{font-size:22px;vertical-align:super;}
+.plan-price sub{font-family:'Poppins', sans-serif;font-size:14px;color:var(--muted);font-weight:400;}
+.plan-desc{font-size:14px;color:var(--text2);margin-bottom:28px;}
+.plan-features{display:flex;flex-direction:column;gap:12px;margin-bottom:30px;}
+.plan-feat{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text2);}
+.pf-check{color:var(--green);font-size:15px;flex-shrink:0;}
+.pf-x{color:var(--muted);font-size:15px;flex-shrink:0;}
+.btn-plan{width:100%;padding:13px;border-radius:10px;font-family:'Poppins', sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;transition:all 0.2s;border:1px solid var(--border);background:transparent;color:var(--text);}
+.btn-plan:hover{border-color:var(--border2);background:var(--green-glow);}
+.btn-plan.fp{background:var(--green);color:#fff;border-color:transparent;box-shadow:0 6px 20px var(--green-glow);}
+.btn-plan.fp:hover{background:var(--green2);}
+
+
+.cta-final{background:var(--bg);padding:120px 5%;text-align:center;position:relative;overflow:hidden;}
+.cta-final-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(16,185,110,0.1) 0%,transparent 70%);pointer-events:none;}
+.cta-final-inner{position:relative;z-index:1;max-width:680px;margin:0 auto;}
+.cta-final .sec-title{font-size:clamp(40px,5vw,64px);}
+.cta-final .sec-desc{margin:0 auto 40px;text-align:center;}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 32px;}
+.footer-inner{max-width:1200px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:50px;margin-bottom:56px;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px;margin-bottom:16px;text-decoration:none;}
+.footer-logo em{font-style:italic;color:var(--green);}
+.footer-tagline{font-size:14px;color:var(--text2);line-height:1.7;max-width:260px;}
+.footer-badges{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;}
+.footer-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;background:var(--bg3);border:1px solid var(--border);font-size:12px;color:var(--text2);}
+.footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:18px;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:11px;}
+.footer-col ul li a{font-size:14px;color:var(--text2);text-decoration:none;transition:color 0.2s;}
+.footer-col ul li a:hover{color:var(--green);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px;}
+.footer-copy{font-size:13px;color:var(--muted);}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;}
+.footer-links a:hover{color:var(--green);}
+
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.d1{transition-delay:0.1s;} .d2{transition-delay:0.2s;} .d3{transition-delay:0.3s;}
+
+
+@media(max-width:1024px){.features-grid{grid-template-columns:repeat(2,1fr);}.testi-grid{grid-template-columns:repeat(2,1fr);}.plans-grid{grid-template-columns:1fr;max-width:420px;}.footer-top{grid-template-columns:1fr 1fr;}}
+@media(max-width:800px){.hero-inner{grid-template-columns:1fr;}.hero-visual{display:none;}.how-inner{grid-template-columns:1fr;}.phone-wrap{display:none;}.stats-strip-inner{grid-template-columns:1fr 1fr;}.quick-nav-inner{flex-wrap:wrap;}.qn-item{flex:1 0 45%;border-bottom:1px solid var(--border);}.nav-links{display:none;}.hamburger{display:flex;}.btn-ghost{display:none;}}
+@media(max-width:600px){.features-grid{grid-template-columns:1fr;}.testi-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr;}.qn-item{flex:1 0 100%;}.stats-strip-inner{grid-template-columns:1fr 1fr;}section{padding:70px 5%;}}
+</style>
+</head>
+<body>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="dashboard.html">📊 Dashboard</a>
+  <a href="transaction.html">💳 Transactions</a>
+  <a href="budget.html">🎯 Budget</a>
+  <a href="report.html">📈 Reports</a>
+  <a href="goals.html">🏆 Goals</a>
+  <a href="login.html" style="margin-top:10px">Log In</a>
+  <a href="signup.html" style="background:var(--green);color:#fff;border-color:var(--green)">Sign Up Free</a>
+</div>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-mark">F</div>
+    <div class="nav-brand-name">Finance<em>IQ</em></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="transaction.html">Transactions</a></li>
+    <li><a href="budget.html">Budget</a></li>
+    <li><a href="report.html">Reports</a></li>
+    <li><a href="goals.html">Goals</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <div class="toggle-knob"></div>
+    </button>
+    <a href="login.html" class="btn-ghost">Log In</a>
+    <a href="signup.html" class="btn-solid">Sign Up</a>
+    <div class="hamburger" id="hamburger" onclick="toggleMob()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      
+      <h1 class="hero-h1">Take Control of<br/>Your <span class="green">Money</span><br/>Build Your <span class="gold">Future</span></h1>
+      <p class="hero-desc">Track every rupee. Set powerful budgets. Get stunning reports. FinanceIQ turns your spending data into a clear roadmap to financial freedom.</p>
+      <div class="hero-cta">
+        <a href="signup.html" class="btn-hero-p">Start Free Today →</a>
+        <a href="dashboard.html" class="btn-hero-s">View Demo</a>
+      </div>
+      <div class="hero-proof">
+        <div class="hero-avatars">
+          <span style="background:#0f9d6a">A</span>
+          <span style="background:#c9a84c;color:#333">S</span>
+          <span style="background:#5b8cf7">U</span>
+          <span style="background:#e07070">F</span>
+          <span style="background:#a78bfa">R</span>
+        </div>
+        <div>
+          <div class="proof-stars">★★★★★</div>
+          <div class="proof-text"><strong>50,000+</strong> users managing smarter finances</div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="hero-card-main">
+        <div class="hc-top">
+          <div class="hc-title">Total Balance</div>
+          <div class="hc-period">June 2025</div>
+        </div>
+        <div class="hc-balance">$12,480.50</div>
+        <div class="hc-change">↑ +$340 this month</div>
+        <div class="hc-bars" id="heroBars"></div>
+        <div class="hc-row">
+          <div class="hc-mini"><div class="hc-mini-lbl">Income</div><div class="hc-mini-val" style="color:var(--green)">$4,200</div></div>
+          <div class="hc-mini"><div class="hc-mini-lbl">Expenses</div><div class="hc-mini-val" style="color:#e07070">$2,860</div></div>
+        </div>
+        <div class="hc-txs">
+          <div class="hc-tx"><div class="hc-tx-left"><div class="hc-tx-icon">💰</div><div><div class="hc-tx-name">Monthly Salary</div><div class="hc-tx-cat">Income · Jun 19</div></div></div><div class="hc-tx-amt" style="color:var(--green)">+$3,000</div></div>
+          <div class="hc-tx"><div class="hc-tx-left"><div class="hc-tx-icon">🏠</div><div><div class="hc-tx-name">Apartment Rent</div><div class="hc-tx-cat">Housing · Jun 17</div></div></div><div class="hc-tx-amt" style="color:#e07070">−$1,200</div></div>
+          <div class="hc-tx"><div class="hc-tx-left"><div class="hc-tx-icon">🛒</div><div><div class="hc-tx-name">Supermarket</div><div class="hc-tx-cat">Groceries · Jun 16</div></div></div><div class="hc-tx-amt" style="color:#e07070">−$45.67</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="ticker"><div class="ticker-inner" id="tickerEl"></div></div>
+
+
+<div class="quick-nav">
+  <div class="quick-nav-inner">
+    <a href="dashboard.html" class="qn-item"><div class="qn-icon">📊</div><div><div class="qn-label">Dashboard</div><div class="qn-desc">Live overview</div></div><div class="qn-arrow">→</div></a>
+    <a href="transaction.html" class="qn-item"><div class="qn-icon">💳</div><div><div class="qn-label">Transactions</div><div class="qn-desc">All your records</div></div><div class="qn-arrow">→</div></a>
+    <a href="budget.html" class="qn-item"><div class="qn-icon">🎯</div><div><div class="qn-label">Budget</div><div class="qn-desc">Set & monitor limits</div></div><div class="qn-arrow">→</div></a>
+    <a href="report.html" class="qn-item"><div class="qn-icon">📈</div><div><div class="qn-label">Reports</div><div class="qn-desc">Deep insights</div></div><div class="qn-arrow">→</div></a>
+    <a href="goals.html" class="qn-item" style="border-right:none"><div class="qn-icon">🏆</div><div><div class="qn-label">Goals</div><div class="qn-desc">Track savings goals</div></div><div class="qn-arrow">→</div></a>
+  </div>
+</div>
+
+
+<section class="features-sec">
+  <div class="container">
+    <div class="features-head reveal">
+      <div class="sec-eyebrow">What We Offer</div>
+      <div class="sec-title">Everything you need to<br/><em>master your finances</em></div>
+      <p class="sec-desc">Built for people who take money seriously — without needing a finance degree.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal"><div class="feat-num">01</div><div class="feat-icon-wrap">📊</div><div class="feat-title">Live Dashboard</div><p class="feat-desc">Your complete financial picture at a glance — income, expenses, savings trends and net worth in real time.</p></div>
+      <div class="feat-card reveal d1"><div class="feat-tag">Popular</div><div class="feat-num">02</div><div class="feat-icon-wrap">💳</div><div class="feat-title">Smart Transactions</div><p class="feat-desc">Log, search, edit and categorize every transaction. Import from CSV or add manually in seconds.</p></div>
+      <div class="feat-card reveal d2"><div class="feat-num">03</div><div class="feat-icon-wrap">🎯</div><div class="feat-title">Budget Control</div><p class="feat-desc">Set category budgets and watch visual progress bars fill up. Get warned before you overspend.</p></div>
+      <div class="feat-card reveal"><div class="feat-num">04</div><div class="feat-icon-wrap">📈</div><div class="feat-title">Detailed Reports</div><p class="feat-desc">Beautiful bar charts, donut charts and trend lines that show exactly where your money goes each month.</p></div>
+      <div class="feat-card reveal d1"><div class="feat-tag">New</div><div class="feat-num">05</div><div class="feat-icon-wrap">🏆</div><div class="feat-title">Savings Goals</div><p class="feat-desc">Set a target, track progress, make deposits. Know exactly how much you need each month to hit your goal.</p></div>
+      <div class="feat-card reveal d2"><div class="feat-num">06</div><div class="feat-icon-wrap">🔒</div><div class="feat-title">Bank-grade Security</div><p class="feat-desc">256-bit SSL encryption protects every byte of your financial data. Your privacy is non-negotiable.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="how-sec">
+  <div class="how-inner container">
+    <div>
+      <div class="sec-eyebrow reveal">How It Works</div>
+      <div class="sec-title reveal">Up and running<br/><em>in minutes</em></div>
+      <p class="sec-desc reveal">No complex setup. No jargon. Just sign up and start understanding your money better today.</p>
+      <div class="steps-list">
+        <div class="step-item reveal"><div class="step-num">1</div><div><div class="step-title">Create your free account</div><div class="step-desc">Sign up in under a minute. No credit card. No tricks. Your data stays private and encrypted.</div></div></div>
+        <div class="step-item reveal d1"><div class="step-num">2</div><div><div class="step-title">Add income & expenses</div><div class="step-desc">Log transactions manually or import a CSV. Set up budget categories for every area of spending.</div></div></div>
+        <div class="step-item reveal d2"><div class="step-num">3</div><div><div class="step-title">Get insights & take control</div><div class="step-desc">Watch reports come alive. Spot habits. Cut waste. Hit your savings goals ahead of schedule.</div></div></div>
+      </div>
+    </div>
+    <div class="phone-wrap reveal">
+      <div class="phone-glow"></div>
+      <div class="phone-outer">
+        <div class="phone-notch"><div class="phone-cam"></div><div class="phone-cam"></div></div>
+        <div class="phone-screen">
+          <div class="ps-header">FinanceIQ</div>
+          <div class="ps-balance">$12,480</div>
+          <div class="ps-change">↑ +$340 this month</div>
+          <div class="ps-bars" id="phoneBars"></div>
+          <div class="ps-tx"><span>💰 Salary</span><strong style="color:var(--green)">+$3,000</strong></div>
+          <div class="ps-tx"><span>🏠 Rent</span><strong style="color:#e07070">−$1,200</strong></div>
+          <div class="ps-tx"><span>🛒 Groceries</span><strong style="color:#e07070">−$45</strong></div>
+          <div class="ps-tx"><span>⚡ Utilities</span><strong style="color:#e07070">−$150</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="stats-strip">
+  <div class="stats-strip-inner">
+    <div class="ss-item reveal"><div class="ss-num" id="s1">0</div><div class="ss-label">Active Users</div></div>
+    <div class="ss-item reveal d1"><div class="ss-num" id="s2">0</div><div class="ss-label">Tracked Monthly</div></div>
+    <div class="ss-item reveal d2"><div class="ss-num" id="s3">0</div><div class="ss-label">Average Rating</div></div>
+    <div class="ss-item reveal d3"><div class="ss-num" id="s4">0</div><div class="ss-label">Uptime</div></div>
+  </div>
+</div>
+
+
+<section class="testi-sec">
+  <div class="container">
+    <div class="testi-head reveal">
+      <div class="sec-eyebrow">User Stories</div>
+      <div class="sec-title">Loved by thousands of<br/><em>smart savers</em></div>
+      <p class="sec-desc">Real people, real results. See how FinanceIQ is changing financial habits across Pakistan.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal"><div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="testi-quote">I had no clue where my salary went every month. FinanceIQ showed me I was spending 38% on eating out. Now I have my first emergency fund saved up.</p><div class="testi-author"><div class="testi-av" style="background:#0f9d6a">AK</div><div><div class="testi-name">Ahmed Khan</div><div class="testi-role">Software Engineer, Lahore</div></div></div></div>
+      <div class="testi-card reveal d1"><div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="testi-quote">The budget alerts saved me before Eid — I was about to overspend on shopping. The reports section is absolutely beautiful and so easy to read.</p><div class="testi-author"><div class="testi-av" style="background:#c9a84c;color:#333">SR</div><div><div class="testi-name">Sara Raza</div><div class="testi-role">School Teacher, Karachi</div></div></div></div>
+      <div class="testi-card reveal d2"><div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="testi-quote">As a freelancer my income varies every month. FinanceIQ helps me budget smart during good months so I'm never stressed during slow ones.</p><div class="testi-author"><div class="testi-av" style="background:#5b8cf7">UM</div><div><div class="testi-name">Usman Malik</div><div class="testi-role">Freelance Designer, Islamabad</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="plans-sec">
+  <div class="container">
+    <div class="plans-head reveal">
+      <div class="sec-eyebrow">Pricing</div>
+      <div class="sec-title">Simple, honest<br/><em>pricing</em></div>
+      <p class="sec-desc">Start free. Upgrade only when you need more power. No hidden fees, ever.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card reveal">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><sup>$</sup>0<sub>/month</sub></div>
+        <div class="plan-desc">Everything you need to get started</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="pf-check">✓</span>50 transactions/month</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>5 budget categories</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Basic reports</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>2 savings goals</div>
+          <div class="plan-feat"><span class="pf-x">✗</span>CSV export</div>
+          <div class="plan-feat"><span class="pf-x">✗</span>Advanced charts</div>
+        </div>
+        <a href="signup.html" class="btn-plan">Get Started Free</a>
+      </div>
+      <div class="plan-card featured reveal d1">
+        <div class="plan-popular">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><sup>$</sup>4.99<sub>/month</sub></div>
+        <div class="plan-desc">For serious financial managers</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="pf-check">✓</span>Unlimited transactions</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Unlimited budgets</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Advanced reports & charts</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Unlimited savings goals</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>CSV export</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Priority support</div>
+        </div>
+        <a href="signup.html" class="btn-plan fp">Start Pro Free →</a>
+      </div>
+      <div class="plan-card reveal d2">
+        <div class="plan-name">Family</div>
+        <div class="plan-price"><sup>$</sup>9.99<sub>/month</sub></div>
+        <div class="plan-desc">Manage finances together</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="pf-check">✓</span>Everything in Pro</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Up to 5 members</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Shared budgets</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Family dashboard</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Dedicated support</div>
+          <div class="plan-feat"><span class="pf-check">✓</span>Early access features</div>
+        </div>
+        <a href="signup.html" class="btn-plan">Get Family Plan</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="cta-final">
+  <div class="cta-final-bg"></div>
+  <div class="cta-final-inner reveal">
+    <div class="sec-eyebrow" style="justify-content:center">Start Today — It's Free</div>
+    <div class="sec-title">Ready to own your<br/><em>financial future?</em></div>
+    <p class="sec-desc">Join 50,000+ people already using FinanceIQ to track, budget, and grow their wealth. No credit card required.</p>
+    <div class="cta-actions">
+      <a href="signup.html" class="btn-hero-p">Create Free Account →</a>
+      <a href="login.html" class="btn-hero-s">Log In</a>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <a href="index.html" class="footer-logo"><div class="nav-brand-mark" style="width:32px;height:32px;font-size:16px">F</div>Finance<em>IQ</em></a>
+        <p class="footer-tagline">Smart personal finance tracking for individuals and families. Take control of your money, starting today.</p>
+        <div class="footer-badges"><div class="footer-badge">🔒 SSL Secured</div><div class="footer-badge">⭐ 4.9 Rated</div><div class="footer-badge">🆓 Free Forever</div></div>
+      </div>
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="dashboard.html">Dashboard</a></li><li><a href="transactions.html">Transactions</a></li><li><a href="budget.html">Budget</a></li><li><a href="reports.html">Reports</a></li><li><a href="goals.html">Goals</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li><li><a href="#">Cookie Policy</a></li><li><a href="#">Security</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 FinanceIQ. All rights reserved. Made with ❤️ for Pakistan.</p>
+      <div class="footer-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+const html = document.documentElement;
+const saved = localStorage.getItem('fiq-theme') || 'dark';
+html.setAttribute('data-theme', saved);
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('fiq-theme', next);
+});
+
+
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+
+function toggleMob() { document.getElementById('mobileNav').classList.toggle('open'); }
+
+
+const barData = [30,50,38,68,52,78,62,88,70,95,80,65];
+const barTypes = [true,false,true,false,true,false,true,false,true,false,true,false];
+const heroBarsEl = document.getElementById('heroBars');
+barData.forEach((h,i) => {
+  const b = document.createElement('div');
+  b.className = 'hc-bar ' + (barTypes[i] ? 'hc-bar-inc' : 'hc-bar-exp');
+  b.style.height = h + '%';
+  heroBarsEl.appendChild(b);
+});
+
+
+const pbd = [{h:70,c:'#0f9d6a'},{h:45,c:'#e07070'},{h:85,c:'#0f9d6a'},{h:55,c:'#e07070'},{h:90,c:'#0f9d6a'},{h:60,c:'#e07070'}];
+const phoneBarsEl = document.getElementById('phoneBars');
+pbd.forEach(b => {
+  const el = document.createElement('div');
+  el.style.cssText = `flex:1;border-radius:3px 3px 0 0;background:${b.c};height:${b.h}%`;
+  phoneBarsEl.appendChild(el);
+});
+
+
+const tickers = [
+  {l:'Savings Rate',v:'+31.9%',up:true},{l:'Budget Used',v:'68%',up:true},
+  {l:'Monthly Income',v:'$4,200',up:true},{l:'Total Expenses',v:'$2,860',up:false},
+  {l:'Net Savings',v:'$1,340',up:true},{l:'Emergency Fund',v:'80%',up:true},
+  {l:'Investment Return',v:'+12.4%',up:true},{l:'Debt Ratio',v:'18%',up:false},
+];
+const tickerEl = document.getElementById('tickerEl');
+[...tickers,...tickers,...tickers].forEach(t => {
+  tickerEl.innerHTML += `<div class="ticker-item"><span>${t.l}</span><span class="ti-val ${t.up?'ti-up':'ti-dn'}">${t.v}</span></div>`;
+});
+
+
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+}, {threshold:0.1});
+reveals.forEach(r => obs.observe(r));
+
+
+function counter(el, end, suffix, dur=1800) {
+  let s = 0; const step = end/(dur/16);
+  const t = setInterval(() => {
+    s += step; if(s >= end){el.textContent=end+suffix;clearInterval(t);return;}
+    el.textContent = (Number.isInteger(end)?Math.floor(s):s.toFixed(1))+suffix;
+  },16);
+}
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      counter(document.getElementById('s1'),50,'K+');
+      counter(document.getElementById('s2'),2.4,'M+',1600);
+      counter(document.getElementById('s3'),4.9,'★');
+      counter(document.getElementById('s4'),99.9,'%',2000);
+      statsObs.disconnect();
+    }
+  });
+},{threshold:0.4});
+statsObs.observe(document.querySelector('.stats-strip'));
+</script>
+</body>
+</html>
