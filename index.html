@@ -2,6 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
+<script src="theme.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>FinanceIQ — Master Your Money</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -34,12 +35,12 @@ html{scroll-behavior:smooth;}
 body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:var(--transition-theme);line-height:1.6;}
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:99px;}
 
-
+/* NAV */
 .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:72px;background:var(--nav-bg);backdrop-filter:blur(20px) saturate(1.5);border-bottom:1px solid var(--border);transition:var(--transition-theme),height 0.3s;}
 .navbar.scrolled{height:62px;}
 .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .nav-brand-mark{width:36px;height:36px;border-radius:10px;background:var(--green);display:grid;place-items:center;font-size:18px;color:#fff;font-weight:800;box-shadow:0 4px 14px var(--green-glow);}
-.nav-brand-name{font-family: Georgia,serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-0.5px;}
+.nav-brand-name{font-family:'Poppins', sans-serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-0.5px;}
 .nav-brand-name em{font-style:italic;color:var(--green);}
 .nav-links{display:flex;align-items:center;gap:2px;list-style:none;}
 .nav-links a{display:block;padding:7px 14px;border-radius:8px;color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:all 0.2s;}
@@ -59,13 +60,13 @@ body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);ov
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
 .hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s;}
 
-
+/* MOBILE NAV */
 .mobile-nav{display:none;position:fixed;inset:0;z-index:999;background:var(--bg);padding:90px 5% 40px;flex-direction:column;gap:8px;}
 .mobile-nav.open{display:flex;}
 .mobile-nav a{display:block;padding:14px 16px;border-radius:10px;color:var(--text);text-decoration:none;font-size:17px;font-weight:600;border:1px solid var(--border);transition:all 0.2s;}
 .mobile-nav a:hover{background:var(--surface);border-color:var(--border2);color:var(--green);}
 
-
+/* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;padding:100px 5% 60px;position:relative;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 100% 80% at 60% -20%,rgba(16,185,110,0.14) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 10% 80%,rgba(212,168,67,0.06) 0%,transparent 60%),var(--bg);}
 [data-theme="light"] .hero-bg{background:radial-gradient(ellipse 100% 80% at 60% -20%,rgba(13,140,85,0.1) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 10% 80%,rgba(212,168,67,0.07) 0%,transparent 60%),var(--bg);}
@@ -75,16 +76,16 @@ body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);ov
 .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;border-radius:99px;background:var(--green-glow);border:1px solid var(--border2);font-size:13px;font-weight:500;color:var(--green);margin-bottom:28px;animation:fadeUp 0.7s ease both;}
 .hero-badge-dot{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:13px;}
 
-.hero-h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(52px,6vw,82px);font-weight:700;line-height:1.0;letter-spacing:-2px;color:var(--text);margin-bottom:24px;animation:fadeUp 0.7s 0.1s ease both;}
-.hero-h1 .green{color:var(--green);font-style:italic;}
+.hero-h1{font-family:'Poppins', sans-serif;font-size:clamp(50px,6vw,70px);font-weight:600;line-height:1.0;letter-spacing:-3px;color:var(--text);margin-bottom:20px;animation:fadeUp 0.7s 0.1s ease both;}
+.hero-h1 .green{color:var(--green);}
 .hero-h1 .gold{color:var(--gold);}
 
 .hero-desc{font-size:18px;color:var(--text2);line-height:1.7;max-width:480px;margin-bottom:40px;font-weight:400;animation:fadeUp 0.7s 0.2s ease both;}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:50px;animation:fadeUp 0.7s 0.3s ease both;}
 
-.btn-hero-p{padding:15px 32px;border-radius:12px;border:none;background:var(--green);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;box-shadow:0 8px 28px var(--green-glow);}
+.btn-hero-p{padding:15px 32px;border-radius:12px;border:none;background:var(--green);color:#fff;font-family:'Poppins', sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;box-shadow:0 8px 28px var(--green-glow);}
 .btn-hero-p:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 14px 36px var(--green-glow);}
-.btn-hero-s{padding:15px 28px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-size:16px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;}
+.btn-hero-s{padding:15px 28px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:'Poppins', sans-serif;font-size:16px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;}
 .btn-hero-s:hover{border-color:var(--border2);background:var(--green-glow);}
 
 .hero-proof{display:flex;align-items:center;gap:16px;animation:fadeUp 0.7s 0.4s ease both;}
@@ -95,7 +96,7 @@ body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);ov
 .proof-text strong{color:var(--text);}
 .proof-stars{color:var(--gold);font-size:13px;}
 
-
+/* HERO CARD */
 .hero-visual{position:relative;animation:fadeUp 0.8s 0.3s ease both;}
 .hero-card-main{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
 .hero-card-main::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--gold),var(--green));background-size:200% 100%;animation:shimmer 3s linear infinite;}
@@ -124,7 +125,7 @@ body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);ov
 .hc-tx-cat{font-size:11px;color:var(--muted);}
 .hc-tx-amt{font-size:14px;font-weight:700;}
 
-
+/* FLOAT CARDS */
 .float-card{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow-sm);animation:float 4s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .float-card-1{top:-20px;right:-20px;min-width:140px;animation-delay:0s;}
@@ -133,7 +134,7 @@ body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);ov
 .fc-val{font-size:18px;font-weight:800;color:var(--green);}
 .fc-sub{font-size:11px;color:var(--text2);margin-top:2px;}
 
-
+/* TICKER */
 .ticker{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;overflow:hidden;}
 .ticker-inner{display:flex;gap:0;animation:ticker 28s linear infinite;width:max-content;}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -142,7 +143,7 @@ body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);ov
 .ticker-item .ti-up{color:var(--green);}
 .ticker-item .ti-dn{color:#e07070;}
 
-
+/* QUICK NAV */
 .quick-nav{background:var(--bg2);}
 .quick-nav-inner{display:flex;max-width:1200px;margin:0 auto;border-left:1px solid var(--border);}
 .qn-item{flex:1;display:flex;align-items:center;gap:14px;padding:26px 28px;text-decoration:none;color:var(--text);border-right:1px solid var(--border);transition:all 0.25s;position:relative;overflow:hidden;}
@@ -155,7 +156,7 @@ body{font-family:'Poppins', sans-serif;background:var(--bg);color:var(--text);ov
 .qn-arrow{margin-left:auto;color:var(--muted);font-size:18px;transition:transform 0.2s;}
 .qn-item:hover .qn-arrow{transform:translateX(4px);color:var(--green);}
 
-
+/* SECTIONS */
 section{padding:100px 5%;}
 .container{max-width:1200px;margin:0 auto;}
 .sec-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--green);margin-bottom:16px;}
@@ -164,6 +165,7 @@ section{padding:100px 5%;}
 .sec-title em{font-style:italic;color:var(--green);}
 .sec-desc{font-size:17px;color:var(--text2);line-height:1.75;max-width:520px;}
 
+/* FEATURES */
 .features-sec{background:var(--bg);}
 .features-head{text-align:center;margin-bottom:64px;}
 .features-head .sec-desc{margin:0 auto;}
@@ -180,7 +182,7 @@ section{padding:100px 5%;}
 .feat-desc{font-size:14px;color:var(--text2);line-height:1.7;}
 .feat-tag{position:absolute;top:20px;right:20px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(212,168,67,0.2);}
 
-
+/* HOW IT WORKS */
 .how-sec{background:var(--bg2);}
 .how-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:0 auto;}
 .steps-list{margin-top:40px;display:flex;flex-direction:column;}
@@ -192,7 +194,7 @@ section{padding:100px 5%;}
 .step-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px;margin-top:8px;}
 .step-desc{font-size:14px;color:var(--text2);line-height:1.65;}
 
-
+/* PHONE */
 .phone-wrap{position:relative;display:flex;justify-content:center;}
 .phone-outer{width:280px;background:var(--surface2);border-radius:40px;border:8px solid var(--surface);box-shadow:var(--shadow),inset 0 0 0 1px var(--border);padding:16px;overflow:hidden;position:relative;}
 .phone-notch{width:80px;height:28px;background:var(--surface2);border-radius:0 0 18px 18px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -208,13 +210,13 @@ section{padding:100px 5%;}
 .ps-tx strong{font-size:12px;font-weight:700;}
 .phone-glow{position:absolute;inset:-30px;z-index:-1;background:radial-gradient(circle,rgba(16,185,110,0.12) 0%,transparent 70%);border-radius:50%;}
 
-
+/* STATS */
 .stats-strip{background:var(--green);padding:60px 5%;}
 .stats-strip-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto;text-align:center;}
 .ss-num{font-family:'Poppins', sans-serif;font-size:52px;font-weight:700;color:#fff;line-height:1;margin-bottom:6px;}
 .ss-label{font-size:14px;color:rgba(255,255,255,0.7);font-weight:500;}
 
-
+/* TESTIMONIALS */
 .testi-sec{background:var(--bg);}
 .testi-head{text-align:center;margin-bottom:56px;}
 .testi-head .sec-desc{margin:0 auto;}
@@ -230,7 +232,7 @@ section{padding:100px 5%;}
 .testi-name{font-size:15px;font-weight:700;color:var(--text);}
 .testi-role{font-size:12px;color:var(--muted);margin-top:2px;}
 
-
+/* PLANS */
 .plans-sec{background:var(--bg2);}
 .plans-head{text-align:center;margin-bottom:56px;}
 .plans-head .sec-desc{margin:0 auto;}
@@ -252,7 +254,7 @@ section{padding:100px 5%;}
 .btn-plan.fp{background:var(--green);color:#fff;border-color:transparent;box-shadow:0 6px 20px var(--green-glow);}
 .btn-plan.fp:hover{background:var(--green2);}
 
-
+/* CTA FINAL */
 .cta-final{background:var(--bg);padding:120px 5%;text-align:center;position:relative;overflow:hidden;}
 .cta-final-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(16,185,110,0.1) 0%,transparent 70%);pointer-events:none;}
 .cta-final-inner{position:relative;z-index:1;max-width:680px;margin:0 auto;}
@@ -260,11 +262,11 @@ section{padding:100px 5%;}
 .cta-final .sec-desc{margin:0 auto 40px;text-align:center;}
 .cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
 
-
+/* FOOTER */
 footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 32px;}
 .footer-inner{max-width:1200px;margin:0 auto;}
 .footer-top{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:50px;margin-bottom:56px;}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px;margin-bottom:16px;text-decoration:none;}
+.footer-logo{font-family:'Poppins', sans-serif;font-size:28px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px;margin-bottom:16px;text-decoration:none;}
 .footer-logo em{font-style:italic;color:var(--green);}
 .footer-tagline{font-size:14px;color:var(--text2);line-height:1.7;max-width:260px;}
 .footer-badges{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;}
@@ -279,13 +281,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
 .footer-links a{font-size:13px;color:var(--muted);text-decoration:none;}
 .footer-links a:hover{color:var(--green);}
 
-
+/* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 .d1{transition-delay:0.1s;} .d2{transition-delay:0.2s;} .d3{transition-delay:0.3s;}
 
-
+/* RESPONSIVE */
 @media(max-width:1024px){.features-grid{grid-template-columns:repeat(2,1fr);}.testi-grid{grid-template-columns:repeat(2,1fr);}.plans-grid{grid-template-columns:1fr;max-width:420px;}.footer-top{grid-template-columns:1fr 1fr;}}
 @media(max-width:800px){.hero-inner{grid-template-columns:1fr;}.hero-visual{display:none;}.how-inner{grid-template-columns:1fr;}.phone-wrap{display:none;}.stats-strip-inner{grid-template-columns:1fr 1fr;}.quick-nav-inner{flex-wrap:wrap;}.qn-item{flex:1 0 45%;border-bottom:1px solid var(--border);}.nav-links{display:none;}.hamburger{display:flex;}.btn-ghost{display:none;}}
 @media(max-width:600px){.features-grid{grid-template-columns:1fr;}.testi-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr;}.qn-item{flex:1 0 100%;}.stats-strip-inner{grid-template-columns:1fr 1fr;}section{padding:70px 5%;}}
@@ -310,9 +312,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </a>
   <ul class="nav-links">
     <li><a href="dashboard.html">Dashboard</a></li>
-    <li><a href="transaction.html">Transactions</a></li>
+    <li><a href="transactions.html">Transactions</a></li>
     <li><a href="budget.html">Budget</a></li>
-    <li><a href="report.html">Reports</a></li>
+    <li><a href="reports.html">Reports</a></li>
     <li><a href="goals.html">Goals</a></li>
   </ul>
   <div class="nav-actions">
@@ -327,13 +329,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
     <div class="hero-content">
       
-      <h1 class="hero-h1">Take Control of<br/>Your <span class="green">Money</span><br/>Build Your <span class="gold">Future</span></h1>
+      <h1 class="hero-h1">Take Control of<br/>Your <span class="green">Money</span>,<br/>Build Your <span class="gold">Future</span></h1>
       <p class="hero-desc">Track every rupee. Set powerful budgets. Get stunning reports. FinanceIQ turns your spending data into a clear roadmap to financial freedom.</p>
       <div class="hero-cta">
         <a href="signup.html" class="btn-hero-p">Start Free Today →</a>
@@ -376,21 +379,21 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </section>
 
-
+<!-- TICKER -->
 <div class="ticker"><div class="ticker-inner" id="tickerEl"></div></div>
 
-
+<!-- QUICK NAV -->
 <div class="quick-nav">
   <div class="quick-nav-inner">
     <a href="dashboard.html" class="qn-item"><div class="qn-icon">📊</div><div><div class="qn-label">Dashboard</div><div class="qn-desc">Live overview</div></div><div class="qn-arrow">→</div></a>
-    <a href="transaction.html" class="qn-item"><div class="qn-icon">💳</div><div><div class="qn-label">Transactions</div><div class="qn-desc">All your records</div></div><div class="qn-arrow">→</div></a>
+    <a href="transactions.html" class="qn-item"><div class="qn-icon">💳</div><div><div class="qn-label">Transactions</div><div class="qn-desc">All your records</div></div><div class="qn-arrow">→</div></a>
     <a href="budget.html" class="qn-item"><div class="qn-icon">🎯</div><div><div class="qn-label">Budget</div><div class="qn-desc">Set & monitor limits</div></div><div class="qn-arrow">→</div></a>
-    <a href="report.html" class="qn-item"><div class="qn-icon">📈</div><div><div class="qn-label">Reports</div><div class="qn-desc">Deep insights</div></div><div class="qn-arrow">→</div></a>
+    <a href="reports.html" class="qn-item"><div class="qn-icon">📈</div><div><div class="qn-label">Reports</div><div class="qn-desc">Deep insights</div></div><div class="qn-arrow">→</div></a>
     <a href="goals.html" class="qn-item" style="border-right:none"><div class="qn-icon">🏆</div><div><div class="qn-label">Goals</div><div class="qn-desc">Track savings goals</div></div><div class="qn-arrow">→</div></a>
   </div>
 </div>
 
-
+<!-- FEATURES -->
 <section class="features-sec">
   <div class="container">
     <div class="features-head reveal">
@@ -409,7 +412,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </section>
 
-
+<!-- HOW IT WORKS -->
 <section class="how-sec">
   <div class="how-inner container">
     <div>
@@ -441,7 +444,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </section>
 
-
+<!-- STATS -->
 <div class="stats-strip">
   <div class="stats-strip-inner">
     <div class="ss-item reveal"><div class="ss-num" id="s1">0</div><div class="ss-label">Active Users</div></div>
@@ -451,7 +454,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </div>
 
-
+<!-- TESTIMONIALS -->
 <section class="testi-sec">
   <div class="container">
     <div class="testi-head reveal">
@@ -467,7 +470,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </section>
 
-
+<!-- PLANS -->
 <section class="plans-sec">
   <div class="container">
     <div class="plans-head reveal">
@@ -523,7 +526,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </section>
 
-
+<!-- CTA -->
 <section class="cta-final">
   <div class="cta-final-bg"></div>
   <div class="cta-final-inner reveal">
@@ -537,7 +540,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
   </div>
 </section>
 
-
+<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
@@ -558,25 +561,17 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:70px 5% 
 </footer>
 
 <script>
+// Theme is handled by theme.js
 
-const html = document.documentElement;
-const saved = localStorage.getItem('fiq-theme') || 'dark';
-html.setAttribute('data-theme', saved);
-document.getElementById('themeToggle').addEventListener('click', () => {
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('fiq-theme', next);
-});
-
-
+// NAVBAR SCROLL
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
 
-
+// MOBILE NAV
 function toggleMob() { document.getElementById('mobileNav').classList.toggle('open'); }
 
-
+// HERO BARS
 const barData = [30,50,38,68,52,78,62,88,70,95,80,65];
 const barTypes = [true,false,true,false,true,false,true,false,true,false,true,false];
 const heroBarsEl = document.getElementById('heroBars');
@@ -587,7 +582,7 @@ barData.forEach((h,i) => {
   heroBarsEl.appendChild(b);
 });
 
-
+// PHONE BARS
 const pbd = [{h:70,c:'#0f9d6a'},{h:45,c:'#e07070'},{h:85,c:'#0f9d6a'},{h:55,c:'#e07070'},{h:90,c:'#0f9d6a'},{h:60,c:'#e07070'}];
 const phoneBarsEl = document.getElementById('phoneBars');
 pbd.forEach(b => {
@@ -596,7 +591,7 @@ pbd.forEach(b => {
   phoneBarsEl.appendChild(el);
 });
 
-
+// TICKER
 const tickers = [
   {l:'Savings Rate',v:'+31.9%',up:true},{l:'Budget Used',v:'68%',up:true},
   {l:'Monthly Income',v:'$4,200',up:true},{l:'Total Expenses',v:'$2,860',up:false},
@@ -608,14 +603,14 @@ const tickerEl = document.getElementById('tickerEl');
   tickerEl.innerHTML += `<div class="ticker-item"><span>${t.l}</span><span class="ti-val ${t.up?'ti-up':'ti-dn'}">${t.v}</span></div>`;
 });
 
-
+// REVEAL
 const reveals = document.querySelectorAll('.reveal');
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
 }, {threshold:0.1});
 reveals.forEach(r => obs.observe(r));
 
-
+// COUNTERS
 function counter(el, end, suffix, dur=1800) {
   let s = 0; const step = end/(dur/16);
   const t = setInterval(() => {

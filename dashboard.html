@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
+<script src="theme.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Dashboard — FinanceIQ</title>
 <link rel="stylesheet" href="style.css"/>
@@ -55,7 +56,8 @@ canvas { width: 100% !important; }
     <li><a href="goals.html">Goals</a></li>
   </ul>
   <div class="nav-right">
-    <div class="nav-avatar">AK</div>
+    <button class="theme-toggle" aria-label="Toggle theme"><div class="toggle-knob"></div></button>
+    <div class="nav-avatar">SK</div>
   </div>
 </nav>
 
@@ -63,7 +65,7 @@ canvas { width: 100% !important; }
 <div class="container">
 
   <div class="page-header">
-    <h1>Good morning, Ahmed 👋</h1>
+    <h1>Welcome Back Sahrish!</h1>
     <p>Here's your financial overview for June 2025</p>
   </div>
 
@@ -113,7 +115,7 @@ canvas { width: 100% !important; }
     <div class="card">
       <div class="card-header">
         <h2>Recent Transactions</h2>
-        <a href="transactions.html" class="btn btn-ghost btn-sm">View All</a>
+        <a href="transaction.html" class="btn btn-ghost btn-sm">View All</a>
       </div>
       <div class="recent-tx" id="recentTx"></div>
     </div>

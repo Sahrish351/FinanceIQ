@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
+<script src="theme.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Sign Up — FinanceIQ</title>
 <link rel="stylesheet" href="style.css"/>
@@ -9,6 +10,7 @@
 body {
   display: grid; place-items: center; min-height: 100vh; padding: 20px;
   background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(15,157,106,0.12) 0%, transparent 70%), var(--bg);
+  transition: background 0.35s ease;
 }
 
 .auth-card {
@@ -22,8 +24,8 @@ body {
 .auth-logo { font-family: var(--display); font-size: 26px; font-weight: 700; color: var(--green); text-align: center; margin-bottom: 6px; }
 .auth-logo span { color: var(--gold); }
 .auth-tagline { text-align: center; color: var(--muted); font-size: 15px; margin-bottom: 32px; }
-.auth-title { font-family: var(--display); font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-.auth-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.auth-title { font-family: var(--display); font-size: 24px; font-weight: 700; text-align: center; margin-top: 20px;    margin-bottom: 15px; }
+.auth-sub { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 28px; }
 
 .name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
@@ -71,13 +73,15 @@ body {
 </style>
 </head>
 <body>
+<button class="theme-toggle" aria-label="Toggle theme" style="position:fixed;top:20px;right:20px;z-index:100"><div class="toggle-knob"></div></button>
 
 <div class="auth-card">
 
-  <div class="auth-logo">Finance<span>IQ</span></div>
-  <div class="auth-tagline">Your smart money companion</div>
 
- 
+  <div class="auth-title">Create your account</div>
+  <div class="auth-sub">Start managing your finances for free — no credit card needed</div>
+
+
   <div class="error-msg" id="errorMsg"></div>
 
   <!-- NAME ROW -->
@@ -107,6 +111,7 @@ body {
     </div>
   </div>
 
+  
 
   <!-- PASSWORD -->
   <div class="form-group">
@@ -116,6 +121,7 @@ body {
       <input type="password" class="form-control" id="password" placeholder="Create a strong password" oninput="checkStrength()"/>
       <span class="show-pw" onclick="togglePw('password', this)">👁</span>
     </div>
+    <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
     
   </div>
 
@@ -133,7 +139,7 @@ body {
   <!-- TERMS -->
   <div class="terms-row">
     <input type="checkbox" id="terms"/>
-    <label for="terms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>. I understand my data is stored securely.</label>
+    <label for="terms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>. </label>
   </div>
 
   <!-- SUBMIT -->
@@ -143,10 +149,7 @@ body {
 
   <a href="login.html" class="btn btn-ghost btn-full" style="display:flex;justify-content:center;font-size:14px">Already have an account? Log In</a>
 
-  <div class="auth-footer" style="margin-top:20px">
-    🔒 Your data is encrypted and never shared with third parties.
-  </div>
-
+ 
 </div>
 
 <div id="toast">✓ Done</div>

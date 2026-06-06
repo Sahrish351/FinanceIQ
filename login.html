@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
+<script src="theme.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Log In — FinanceIQ</title>
 <link rel="stylesheet" href="style.css"/>
 <style>
 body { display:grid; place-items:center; min-height:100vh; padding:20px;
-  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(15,157,106,0.12) 0%, transparent 70%), var(--bg); }
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(15,157,106,0.12) 0%, transparent 70%), var(--bg);
+  transition: background 0.35s ease; }
 .auth-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:40px; width:100%; max-width:420px; }
 .auth-logo { font-family:var(--display); font-size:26px; font-weight:700; color:var(--green); text-align:center; margin-bottom:6px; }
 .auth-logo span { color:var(--gold); }
@@ -29,13 +31,11 @@ body { display:grid; place-items:center; min-height:100vh; padding:20px;
 </style>
 </head>
 <body>
+<button class="theme-toggle" aria-label="Toggle theme" style="position:fixed;top:20px;right:20px;z-index:100"><div class="toggle-knob"></div></button>
 
 <div class="auth-card">
   <div class="auth-logo">Finance<span>IQ</span></div>
   <div class="auth-tagline">Smart money management</div>
-
-  <div class="auth-title">Welcome back 👋</div>
-  <div class="auth-sub">Log in to your account to continue</div>
 
   <div class="error-msg" id="errorMsg">Invalid email or password. Please try again.</div>
 
